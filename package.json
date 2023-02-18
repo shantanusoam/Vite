@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "react": "^18.0.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.0.0"
   },
   "eslintConfig": {
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
+    "@types/react-beautiful-dnd": "^13.1.3",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^1.3.0",
     "typescript": "^4.6.3",

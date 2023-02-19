@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/react-csv": "^1.1.3",
     "react": "^18.0.0",
     "react-beautiful-dnd": "^13.1.1",
+    "react-csv": "^2.2.2",
     "react-dom": "^18.0.0"
   },
   "eslintConfig": {

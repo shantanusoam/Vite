@@ -8,6 +8,7 @@ interface props {
   setTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
   setCompletedTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
   CompletedTodos: Array<Todo>;
+  setLocalTodos: any;
 }
 
 const TodoList: React.FC<props> = ({
@@ -15,6 +16,7 @@ const TodoList: React.FC<props> = ({
   setTodos,
   CompletedTodos,
   setCompletedTodos,
+  setLocalTodos,
 }) => {
   return (
     <div className="container">
@@ -33,6 +35,7 @@ const TodoList: React.FC<props> = ({
                 todo={todo}
                 key={todo.id}
                 setTodos={setTodos}
+                setLocalTodos={setLocalTodos}
               />
             ))}
             {provided.placeholder}
@@ -56,6 +59,7 @@ const TodoList: React.FC<props> = ({
                 todo={todo}
                 key={todo.id}
                 setTodos={setCompletedTodos}
+                setLocalTodos={setLocalTodos}
               />
             ))}
             {provided.placeholder}

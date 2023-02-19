@@ -1,24 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import InputField from './components/InputField';
 import TodoList from './components/TodoList';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { Todo } from './models/models';
+import { useLocalStorage } from './Hooks/useLocalStorage';
+import { CSVLink } from 'react-csv';
 
 const App: React.FC = () => {
   const [todo, setTodo] = useState<string>('');
   const [todos, setTodos] = useState<Array<Todo>>([]);
   const [CompletedTodos, setCompletedTodos] = useState<Array<Todo>>([]);
-
+  const [LocalTodos, setLocalTodos] = useLocalStorage<string>(
+    'LocalTodos',
+    '[]'
+  );
+  const DeleteTasks = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCompletedTodos([]);
+    setTodos([]);
+    setLocalTodos(JSON.stringify([]));
+  };
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(todos);
+    console.log(CompletedTodos);
+    console.log(todo);
+    console.log(`LocalTodos: ${LocalTodos}`);
 
     if (todo) {
       setTodos([...todos, { id: Date.now(), todo, isDone: false }]);
-      setTodo('');
-    }
-  };
 
+      setTodo('');
+      setLocalTodos(
+        JSON.stringify([...todos, { id: Date.now(), todo, isDone: false }])
+      );
+    }
+    e.preventDefault();
+    console.log(todos);
+    console.log(CompletedTodos);
+    console.log(todo);
+    console.log(`LocalTodos: ${LocalTodos}`);
+  };
+  useEffect(() => {
+    console.log(LocalTodos);
+    if (todos) {
+      setTodos(JSON.parse(LocalTodos));
+    }
+  }, []);
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
 
@@ -57,20 +86,39 @@ const App: React.FC = () => {
     setCompletedTodos(complete);
     setTodos(active);
   };
-
+  const headers = [
+    { label: 'Task', key: 'todo' },
+    { label: 'Status', key: 'isDone' },
+  ];
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="App">
-        <span className="heading">Taskify</span>
-        <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
-        <TodoList
-          todos={todos}
-          setTodos={setTodos}
-          CompletedTodos={CompletedTodos}
-          setCompletedTodos={setCompletedTodos}
-        />
-      </div>
-    </DragDropContext>
+    <>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="App">
+          <span className="heading">Task It Up</span>
+          <div className="btnList">
+            <CSVLink data={todos} headers={headers} filename="DailyTask.csv">
+              <button className="btnList__btn-EX">Export</button>
+            </CSVLink>
+            <div>
+              <button className="btnList__btn-DL" onClick={DeleteTasks}>
+                DELETE
+              </button>
+              <p className="btnList__P">Delete all the Tasks</p>
+            </div>
+          </div>
+
+          <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
+
+          <TodoList
+            todos={todos}
+            setTodos={setTodos}
+            CompletedTodos={CompletedTodos}
+            setCompletedTodos={setCompletedTodos}
+            setLocalTodos={setLocalTodos}
+          />
+        </div>
+      </DragDropContext>
+    </>
   );
 };
 

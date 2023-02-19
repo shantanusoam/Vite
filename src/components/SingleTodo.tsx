@@ -10,7 +10,8 @@ const SingleTodo: React.FC<{
   todo: Todo;
   todos: Array<Todo>;
   setTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
-}> = ({ index, todo, todos, setTodos }) => {
+  setLocalTodos: any;
+}> = ({ index, todo, todos, setTodos, setLocalTodos }) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [editTodo, setEditTodo] = useState<string>(todo.todo);
 
@@ -21,22 +22,26 @@ const SingleTodo: React.FC<{
 
   const handleEdit = (e: React.FormEvent, id: number) => {
     e.preventDefault();
-    setTodos(
-      todos.map((todo) => (todo.id === id ? { ...todo, todo: editTodo } : todo))
+    let SaveTodos_To_Reuse = todos.map((todo) =>
+      todo.id === id ? { ...todo, todo: editTodo } : todo
     );
+    setTodos(SaveTodos_To_Reuse);
+    setLocalTodos(JSON.stringify(SaveTodos_To_Reuse));
     setEdit(false);
   };
 
   const handleDelete = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    let SaveTodos_To_Reuse = todos.filter((todo) => todo.id !== id);
+    setTodos(SaveTodos_To_Reuse);
+    setLocalTodos(JSON.stringify(SaveTodos_To_Reuse));
   };
 
   const handleDone = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
-      )
+    let SaveTodos_To_Reuse = todos.map((todo) =>
+      todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
     );
+    setTodos(SaveTodos_To_Reuse);
+    setLocalTodos(JSON.stringify(SaveTodos_To_Reuse));
   };
 
   return (
